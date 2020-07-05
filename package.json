@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/robitops10/api/issues"
   },
-  "homepage": "https://github.com/robitops10/api#readme"
+  "homepage": "https://github.com/robitops10/api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
