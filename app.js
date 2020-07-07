@@ -34,7 +34,7 @@ app.use( morgan('dev') ); 														// Login functionality healper.
 //-----------[ CRUD Read ]-----------
 
 // read only one time, insted of every request
-let file = path.resolve(__dirname, 'public', 'files', 'users.json');
+let file = path.resolve(__dirname, 'files', 'users.json');
 let users = JSON.parse( fs.readFileSync(file, 'utf8') );
 
 const getAllUsers =  (req, res) => {
