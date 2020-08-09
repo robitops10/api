@@ -7,7 +7,7 @@ const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
 console.log( data );
 
-const db = process.env.DB;
+const db = process.env.DB_LOCAL;
 mongoose.connect( db, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,

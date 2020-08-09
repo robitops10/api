@@ -1,5 +1,17 @@
-let query = 'age,gender,-a,b,c';
-// query = query.split(',').join(' ');
-query = query.replace(/,/g, ' ');
+class APIFeatures {
+	constructor(query, queryString) {
+		this.query = query;
+		this.queryString = queryString;
+	}
+	filter() {
+		this.query = 'Updated';
+	}
+}
 
-console.log( query );
+
+
+const features = new APIFeatures('userModel', '{name: "riaz"}').filter();
+// features.filter();
+
+
+console.log( features.queryString );

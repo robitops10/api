@@ -1,48 +1,56 @@
 const userModel = require('./../models/userModel');
-
+const APIFeatures = require('./../assect/APIFeatures');
 
 
 exports.getAllUsers = async (req,res) => {
 	try {
 
-		// 1) query filtering
-		let queryObj = { ...req.query };
-		const excluded = [ 'sort', 'fields', 'page', 'limit' ];
-		excluded.forEach( item => delete queryObj[item] );
 
-		// advance query filtering
-		// req.query 	== 	?name=riaz&age=20 				=>  { name: 'riaz', age: 20}
-		// req.query 	== 	?name=riaz&age[gte]=20 		=>  { name: 'riaz', age: {gte: 20} }
-		let queryStr = JSON.stringify( queryObj );
-		queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
-		queryObj = JSON.parse( queryStr );
+		// // 1) query filtering
+		// let queryObj = { ...req.query };
+		// const excluded = [ 'sort', 'fields', 'page', 'limit' ];
+		// excluded.forEach( item => delete queryObj[item] );
 
-		// sorting by query
-		let query = userModel.find( queryObj ); 					//
+		// // advance query filtering
+		// // req.query 	== 	?name=riaz&age=20 				=>  { name: 'riaz', age: 20}
+		// // req.query 	== 	?name=riaz&age[gte]=20 		=>  { name: 'riaz', age: {gte: 20} }
+		// let queryStr = JSON.stringify( queryObj );
+		// queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+		// queryObj = JSON.parse( queryStr );
 
-
-		// 2) sorting
-		let sort = req.query.sort;
-		query = sort ? query.sort( sort.replace(',', ' ') ) : query;
+		// // sorting by query
+		// let query = userModel.find( queryObj ); 					//
 
 
-		// 3) projection
-		let fields = req.query.fields;
-		query = fields ? query.select( fields.replace(',', ' ') ) : query.select('-__v');
-
-		// 4) Pagination
-		// page1 = 1 - 10, 		page2 = 11 - 20, 		page3 = 21 - 30 ....
-		let page = req.query.page * 1 || 1;
-		let limit = req.query.limit * 1 || 3;
-		let skip = (page - 1) * limit; 						// lastPage * limit
-
-		let countDocuments = await userModel.countDocuments();
-
-		if(skip >= countDocuments ) throw Error('No more Page left.');
-		query = query.skip(skip).limit(limit);
+		// // 2) sorting
+		// let sort = req.query.sort;
+		// query = sort ? query.sort( sort.split(',').join(' ') ) : query;
 
 
-		let users = await query;
+		// // 3) projection
+		// let fields = req.query.fields;
+		// query = fields ? query.select( fields.split(',').join(' ') ) : query.select('-__v');
+
+		// // 4) Pagination
+		// // page1 = 1 - 10, 		page2 = 11 - 20, 		page3 = 21 - 30 ....
+		// let page = req.query.page * 1 || 1;
+		// let limit = req.query.limit * 1 || 3;
+		// let skip = (page - 1) * limit; 						// lastPage * limit
+
+		// let countDocuments = await userModel.countDocuments();
+
+		// if(skip >= countDocuments ) throw Error('No more Page left.');
+		// query = query.skip(skip).limit(limit);
+
+		// let users = await query;
+
+
+		const features = new APIFeatures(userModel.find(), req.query );
+		features.filter().sort().projection().pagination();
+
+		// 3) Finally APIFeatures.prototype.query == features.query
+		let query = features.query; 			// (Access Class Properties)
+		let users = await query; 					// make Request to Server & wait for response.
 
 
 		res.status(200).json({
