@@ -1,5 +1,6 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
+const ErrorHandler = require('./../asset/ErrorHandler');
 
 const router = express.Router();
 
@@ -15,11 +16,9 @@ router.route('/:id') 																	// params must be after any sub path
 	.patch(userController.updateUser)
 	.delete(userController.deleteUser);
 
-router.all('*', (req,res) => {
-	res.status(404).json({
-		status : 'fail',
-		message : 'Opps no user Route exists'
-	});
+
+router.all('*', (req, res, next) => {
+	next( new ErrorHandler('Opps!!! no users route exists', 404) );
 });
 
 module.exports = router;

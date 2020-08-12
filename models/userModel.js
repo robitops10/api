@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// new mongoose.Schema( {schema} [,{option}] )
 const userSchema = new mongoose.Schema({
 	index : {
 		type: Number,
@@ -7,7 +8,7 @@ const userSchema = new mongoose.Schema({
 	},
 	name: {
 		type: String,
-		required: [true, 'name must have to']
+		required: [true, 'User must have a name']
 	},
 	isActive : {
 		type: Boolean,
@@ -22,7 +23,11 @@ const userSchema = new mongoose.Schema({
 	age : Number,
 	gender : {
 		type : String,
-		required: true
+		required: [ true, 'Require gender type' ],
+		enum: {
+			values : ['male', 'female', 'clip'],
+			message : 'Gender will be eighter male or female or clip'
+		}
 	},
 	eyeColor : String,
 	favoriteFruit: String,
@@ -36,7 +41,16 @@ const userSchema = new mongoose.Schema({
 		}
 	},
 	tags: [String]
+}, { 																							// (1) Enable Virtual field, not really exits in database.
+	toJSON 			: { virtuals: true }, 							// add when return query as JSON String
+	toObject 		: { virtuals: true } 								// when return as Object
 });
+
+userSchema.virtual('adult').get( function () { 		// (2) Add Virtual Fields adult: elder | teneger
+	return this.age > 20 ? 'elder' : 'teneger';
+});
+
+
 
 let userModel = mongoose.model('users', userSchema);
 module.exports = userModel;

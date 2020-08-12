@@ -1,17 +1,10 @@
-class APIFeatures {
-	constructor(query, queryString) {
-		this.query = query;
-		this.queryString = queryString;
-	}
-	filter() {
-		this.query = 'Updated';
-	}
-}
+
+let value = "E11000 duplicate key error collection: api2.users index: name_1 dup key: { name: \"Riajul Islam\" }";
+// value = value;
+value = value.match(/".*?"/)[0].trim('\\')
+console.log( value );
+
+// value = value.match(/(["|'])(?:(?=(\\?))\2.)*?\1/);
 
 
 
-const features = new APIFeatures('userModel', '{name: "riaz"}').filter();
-// features.filter();
-
-
-console.log( features.queryString );

@@ -3,6 +3,8 @@ const morgan = require('morgan');
 
 const tourRouter = require('./route/tourRouter');
 const userRouter = require('./route/userRouter');
+const ErrorHandler = require('./asset/ErrorHandler');
+const errorController = require('./controllers/errorController');
 
 
 const app = express();
@@ -24,16 +26,19 @@ app.use( express.json() ); 						// enable req.body
 // });
 
 
+// routers
 app.use('/api/v1/tours', tourRouter );
 app.use('/api/v1/users', userRouter );
 
 
-
 // Default page
-app.all( '*', (req, res) => {
-	res.send(`Default Page : ${req.url}`)
+app.all( '*', (req, res, next ) => {
+	const err = new ErrorHandler('app route not found', 404);
+	next(err); 																								// pass object will capture by Express Error Handler
 });
 
+app.use( errorController ); 																// Handle every Error that use next(value)
 
 module.exports = app;
+
 

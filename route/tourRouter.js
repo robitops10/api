@@ -1,5 +1,6 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController');
+const ErrorHandler = require('./../asset/ErrorHandler');
 
 const router = express.Router();
 
@@ -17,11 +18,9 @@ router.route('/:id')
 	.patch(tourController.updateTour)
 	.delete(tourController.deleteTour);
 
-router.all('*', (req,res) => {
-	res.status(404).json({
-		status : 'fail',
-		message : 'Opps no tour Route exists'
-	});
+router.all('*', (req, res, next) => {
+	next( new ErrorHandler('Opps!!! no tours exists', 404) );
+
 });
 
 module.exports = router;
