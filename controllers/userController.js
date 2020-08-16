@@ -6,10 +6,11 @@ const ErrorHandler  = require('./../asset/ErrorHandler');
 
 
 exports.getAllUsers = catchAsyncFunc( async (req, res, next) => {
-	const features = new APIFeatures(userModel.find(), req.query );
+	const features = new APIFeatures( userModel.find(), req.query );
 	features.filter().sort().projection().pagination();
 	let query = features.query; 			// (Access Class Properties)
 	let users = await query; 					// make Request to Server & wait for response.
+
 
 	res.status(200).json({
 		status 	: 'success',

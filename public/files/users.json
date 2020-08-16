@@ -62,30 +62,7 @@
   {
     "id": 4,
     "login": "riajul islam",
-    "age": "22"
-  },
-  {
-    "id": 5,
-    "login": "riajul islam",
-    "age": "22"
-  },
-  {
-    "id": 6,
-    "login": "riajul islam",
-    "age": "22"
-  },
-  {
-    "id": 7,
-    "login": "riajul islam",
-    "age": "22"
-  },
-  {
-    "id": 8
-  },
-  {
-    "id": 9,
-    "login": "riajul islam",
     "age": "22",
-    "url": "/home/my/site"
+    "url": "something"
   }
 ]

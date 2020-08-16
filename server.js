@@ -10,8 +10,8 @@ const app = require('./index');
  // $ mongo "mongodb+srv://cluster0.u3djw.mongodb.net/api2" --username riaz
 
 
-// const db = process.env.DB_LOCAL;
-const db = process.env.DB;
+const db = process.env.DB_LOCAL;
+// const db = process.env.DB;
 mongoose.connect( db, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,

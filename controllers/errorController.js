@@ -19,6 +19,15 @@ const handleValidationErrorDB = (err) => {
 	return new ErrorHandler(error, 400);
 };
 
+const handleJsonWebTokenError = (err) => {
+	return new ErrorHandler( err.message, 401);
+};
+
+const handleTokenExpiredError = (err) => {
+	return new ErrorHandler( 'Your Token is expired, Please Login Again..', 401);
+};
+
+
 const errDev = (err, res) => {
 	res.status(err.statusCode).json({
 		// name : err.constructor.name, 		// self class name
@@ -50,6 +59,9 @@ module.exports = (err, req, res, next) => {
 		errDev(err, res);
 
 
+		// let error = '';
+		// if( err.name === 'JsonWebTokenError' )  error = handleJsonWebTokenError(err);
+		// errPro(error, res); 									// only if (isOperational == true)
 
 	} else if( process.env.NODE_ENV === 'production' ) {
 
@@ -58,6 +70,8 @@ module.exports = (err, req, res, next) => {
 		if( err.name === 'CastError' 	)  error = handleCastErrorDB(err);
 		if( err.name === 'MongoError' )  error = handleMongoErrorDB(err);
 		if( err.name === 'ValidationError' )  error = handleValidationErrorDB(err);
+		if( err.name === 'JsonWebTokenError' )  error = handleJsonWebTokenError(err);
+		if( err.name === 'TokenExpiredError' )  error = handleTokenExpiredError(err);
 
 		errPro(error, res); 									// only if (isOperational == true)
 

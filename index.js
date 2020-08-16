@@ -3,6 +3,8 @@ const morgan = require('morgan');
 
 const tourRouter = require('./route/tourRouter');
 const userRouter = require('./route/userRouter');
+const loginRouter = require('./route/loginRouter');
+
 const ErrorHandler = require('./asset/ErrorHandler');
 const errorController = require('./controllers/errorController');
 
@@ -22,6 +24,7 @@ app.use( express.json() ); 						// enable req.body
 
 // app.use((req, res, next) => {
 // 	console.log( new Date().toUTCString() );
+// 	// console.log( req.headers );
 // 	next();
 // });
 
@@ -29,6 +32,9 @@ app.use( express.json() ); 						// enable req.body
 // routers
 app.use('/api/v1/tours', tourRouter );
 app.use('/api/v1/users', userRouter );
+app.use('/api/v1/logins', loginRouter );
+
+
 
 
 // Default page

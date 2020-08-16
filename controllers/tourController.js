@@ -1,6 +1,79 @@
+const tourModel = require('./../models/tourModel');
+const catchAsyncFunc = require('./../asset/catchAsyncFunc');
+const ErrorHandler = require('./../asset/ErrorHandler');
+
+
+
+exports.getAllTours = catchAsyncFunc( async(req, res) => {
+	let tour = tourModel.find();
+	tour = await tour.sort({_id: -1});
+
+	res.status(200).json({
+		status: 'success',
+		count: tour.length,
+		data: {tour}
+	});
+});
+
+exports.getTour = catchAsyncFunc(async (req, res, next) => {
+	let tour = await tourModel.findById(req.params.id);
+	if( !tour ) {
+		return next( new ErrorHandler('This is modified ID', 200));
+	}
+	res.status(200).json({
+		status: 'success',
+		data: {tour}
+	});
+});
+
+exports.createTour = catchAsyncFunc(async (req, res, next) => {
+	const tour = await tourModel.create([req.body]);
+	res.status(201).json({
+		status: 'success',
+		data: {tour}
+	});
+});
+
+exports.updateTour = catchAsyncFunc(async (req, res, next) => {
+	const tour = await tourModel.findByIdAndUpdate(req.params.id, req.body, {
+		new: true,
+		runValidators: true
+	});
+
+	if( !tour ) {
+		return next( new ErrorHandler('No User found to update.', 404));
+	}
+
+	res.status(201).json({
+		status: 'success',
+		data: {tour}
+	});
+});
+
+exports.deleteTour = catchAsyncFunc(async (req, res, next) => {
+	const tour = await tourModel.findByIdAndDelete(req.params.id);
+
+	if(!tour) {
+		return next( new ErrorHandler('Opps!!!. User not found.', 404));
+	}
+
+	res.status(204).json({
+		status: 'success',
+		data 	: {tour}
+	});
+
+});
+
+
+
+
+
+/*
+** For File manupulation
+
+
 const path = require('path');
 const fs = require('fs');
-
 let file = path.resolve(__dirname, './../public/files/users.json');
 let tours = JSON.parse(fs.readFileSync( file, 'utf8') );
 
@@ -88,7 +161,7 @@ exports.deleteTour = (req, res) => {
 	if( lastIndex < tours.length ) {
 		res.status(204).json({
 			status: 'success',
-			data 	: null
+			data 	: 'delete operation is success, but not programed to delete by Riaz.'
 		});
 	} else {
 		res.status(404).json({
@@ -96,3 +169,5 @@ exports.deleteTour = (req, res) => {
 		});
 	}
 };
+
+*/

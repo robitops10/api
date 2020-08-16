@@ -1,5 +1,6 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController');
+const loginController = require('./../controllers/loginController');
 const ErrorHandler = require('./../asset/ErrorHandler');
 
 const router = express.Router();
@@ -10,13 +11,14 @@ const router = express.Router();
 
 
 router.route('/')
-	.get(tourController.getAllTours)
-	.post(tourController.checkBody, tourController.createTour);
+	.get(loginController.protect, tourController.getAllTours)
+	.post(tourController.createTour);
 
 router.route('/:id')
 	.get(tourController.getTour)
 	.patch(tourController.updateTour)
-	.delete(tourController.deleteTour);
+	.delete(loginController.protect, loginController.restrictTo('admin', 'lead-guide'), tourController.deleteTour);
+	// .delete(tourController.deleteTour);
 
 router.all('*', (req, res, next) => {
 	next( new ErrorHandler('Opps!!! no tours exists', 404) );
