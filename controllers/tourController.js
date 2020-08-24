@@ -5,18 +5,33 @@ const ErrorHandler = require('./../asset/ErrorHandler');
 
 
 exports.getAllTours = catchAsyncFunc( async(req, res) => {
-	let tour = tourModel.find();
-	tour = await tour.sort({_id: -1});
+	// let tour = tourModel.find();
+	// tour = await tour.sort({_id: -1});
+
+	// pupulate virtual field reviews in tourModel (2)
+	let tour = await tourModel.find().populate('reviews');
 
 	res.status(200).json({
 		status: 'success',
 		count: tour.length,
-		data: {tour}
+		tour
 	});
 });
 
 exports.getTour = catchAsyncFunc(async (req, res, next) => {
+	// let tour = await tourModel.findById(req.params.id);
+
+	// let tour = await tourModel.findById(req.params.id).populate('guides'); 	//	(1)	Auto embed by ID (Full Object)
+
+	// let tour = await tourModel.findById(req.params.id).populate({ 						//	(2)	all but __v & passwordChangedAt
+	// 	path: 'guides',
+	// 	select: '-__v -passwordChangedAt'
+	// });
+
+	// 	(3) if need to multiple (all) route then use mongoose middleware, pre in tourModel
+	// 	now every find have object seams that it is embaded.	(but it is referenced, see in Database the real fact)
 	let tour = await tourModel.findById(req.params.id);
+
 	if( !tour ) {
 		return next( new ErrorHandler('This is modified ID', 200));
 	}

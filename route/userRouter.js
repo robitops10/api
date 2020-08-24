@@ -5,6 +5,18 @@ const ErrorHandler = require('./../asset/ErrorHandler');
 const router = express.Router();
 
 // add this route before :params, otherwise it execute that insted of this.
+
+
+
+
+
+
+
+
+
+
+
+
 router.route('/top-5-documents').get(userController.top5documents, userController.getAllUsers);
 
 router.route('/')

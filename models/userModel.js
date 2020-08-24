@@ -52,7 +52,7 @@ userSchema.virtual('adult').get( function () { 		// (2) Add Virtual Fields adult
 
 
 
-let userModel = mongoose.model('users', userSchema);
+let userModel = mongoose.model('User', userSchema);
 module.exports = userModel;
 
 

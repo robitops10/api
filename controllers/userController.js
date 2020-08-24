@@ -3,6 +3,11 @@ const userModel = require('./../models/userModel');
 const APIFeatures = require('./../asset/APIFeatures');
 const catchAsyncFunc  = require('./../asset/catchAsyncFunc');
 const ErrorHandler  = require('./../asset/ErrorHandler');
+const sendData  = require('./../asset/sendData');
+
+
+
+
 
 
 exports.getAllUsers = catchAsyncFunc( async (req, res, next) => {
@@ -12,11 +17,7 @@ exports.getAllUsers = catchAsyncFunc( async (req, res, next) => {
 	let users = await query; 					// make Request to Server & wait for response.
 
 
-	res.status(200).json({
-		status 	: 'success',
-		count 	: users.length,
-		data 		: users
-	});
+	sendData(res, 200, users);
 });
 
 exports.getUser = catchAsyncFunc( async (req, res, next) => {
@@ -26,18 +27,12 @@ exports.getUser = catchAsyncFunc( async (req, res, next) => {
 		return next( new ErrorHandler('User not found', 404) );
 	}
 
-	res.status(200).json({
-		status 	: 'success',
-		data 		: user
-	});
+	sendData(res, 200, user);
 });
 
 exports.createUser = catchAsyncFunc( async (req, res, next) => {
-	let newUser = await userModel.create(req.body);
-	res.status(201).json({
-		status	: 'success',
-		data 		: newUser
-	});
+	let user = await userModel.create(req.body);
+	sendData(res, 201, user);
 });
 
 exports.updateUser = catchAsyncFunc( async (req, res, next) => {
@@ -50,10 +45,7 @@ exports.updateUser = catchAsyncFunc( async (req, res, next) => {
 		return next( new ErrorHandler('User not found', 404) );
 	}
 
-	res.status(201).json({
-		status 	: 'success',
-		data 		: user
-	});
+	sendData(res, 201, user);
 });
 
 exports.deleteUser = catchAsyncFunc( async (req, res, next) => {
@@ -63,10 +55,7 @@ exports.deleteUser = catchAsyncFunc( async (req, res, next) => {
 		return next( new ErrorHandler('User not found', 404) );
 	}
 
-	res.status(204).json({
-		status : 'success',
-		data : user
-	});
+	sendData(res, 204, user);
 });
 
 
