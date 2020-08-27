@@ -9,7 +9,7 @@ const hpp = require('hpp');
 const tourRouter = require('./route/tourRouter');
 const userRouter = require('./route/userRouter');
 const loginRouter = require('./route/loginRouter');
-const reviewRoute = require('./route/reviewRoute');
+const reviewRouter = require('./route/reviewRouter');
 
 const ErrorHandler = require('./asset/ErrorHandler');
 const errorController = require('./controllers/errorController');
@@ -53,7 +53,7 @@ app.use( hpp( { whitelist: ['duration']}) ); 		// Remove Duplicate params's name
 app.use('/api/v1/tours', tourRouter );
 app.use('/api/v1/users', userRouter );
 app.use('/api/v1/logins', loginRouter );
-app.use('/api/v1/reviews', reviewRoute );
+app.use('/api/v1/reviews', reviewRouter );
 
 
 // app.get('/api/v1/reviews', (req, res) => {

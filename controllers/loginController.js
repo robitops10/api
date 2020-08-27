@@ -6,6 +6,7 @@ const catchAsyncFunc  = require('./../asset/catchAsyncFunc');
 const ErrorHandler  = require('./../asset/ErrorHandler');
 const sendEmail  = require('./../asset/email');
 const sendData  = require('./../asset/sendData');
+const handlerFactory = require('./handlerFactory');
 
 const signToken = (id) => {
 	return jwt.sign(
@@ -352,7 +353,7 @@ exports.getLogin = catchAsyncFunc(async (req, res, next) => {
 exports.createLogin = catchAsyncFunc(async (req, res, next) => {
 		// const logins = await loginModel.create(req.body);
 		const logins = await loginModel.create({
-			user : req.body.user,
+			name : req.body.name,
 			email : req.body.email,
 			password : req.body.password,
 			confirmPassword : req.body.confirmPassword
@@ -372,24 +373,28 @@ exports.createLogin = catchAsyncFunc(async (req, res, next) => {
 		});
 });
 
-exports.updateLogin = catchAsyncFunc(async (req, res, next) => {
-	const logins = await loginModel.findByIdAndUpdate(req.params.id, req.body, {
-		new : true,
-		runValidators : true
-	});
-	res.status(200).json({
-		status: 'success',
-		data : logins
-	});
-});
+exports.updateLogin = handlerFactory.updateOne(loginModel);
+exports.deleteLogin = handlerFactory.deleteOne(loginModel);
 
-exports.deleteLogin = catchAsyncFunc(async (req, res, next) => {
-	const logins = await loginModel.findByIdAndDelete(req.params.id);
-	res.status(200).json({
-		status: 'success',
-		data : logins
-	});
-});
+
+// exports.updateLogin = catchAsyncFunc(async (req, res, next) => {
+// 	const logins = await loginModel.findByIdAndUpdate(req.params.id, req.body, {
+// 		new : true,
+// 		runValidators : true
+// 	});
+// 	res.status(200).json({
+// 		status: 'success',
+// 		data : logins
+// 	});
+// });
+
+// exports.deleteLogin = catchAsyncFunc(async (req, res, next) => {
+// 	const logins = await loginModel.findByIdAndDelete(req.params.id);
+// 	res.status(200).json({
+// 		status: 'success',
+// 		data : logins
+// 	});
+// });
 
 
 

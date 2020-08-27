@@ -1,83 +1,101 @@
 const tourModel = require('./../models/tourModel');
 const catchAsyncFunc = require('./../asset/catchAsyncFunc');
 const ErrorHandler = require('./../asset/ErrorHandler');
+const sendData = require('./../asset/sendData');
+
+const handlerFactory = require('./handlerFactory');
 
 
+exports.getAllTours = handlerFactory.getAll(tourModel, { path:'reviews', select:'-__v -createdAt' });
+exports.getTour 		= handlerFactory.getOne(tourModel);
+exports.createTour 	= handlerFactory.createOne(tourModel);
+exports.updateTour 	= handlerFactory.updateOne(tourModel);
+exports.deleteTour 	= handlerFactory.deleteOne(tourModel);
 
-exports.getAllTours = catchAsyncFunc( async(req, res) => {
-	// let tour = tourModel.find();
-	// tour = await tour.sort({_id: -1});
 
-	// pupulate virtual field reviews in tourModel (2)
-	let tour = await tourModel.find().populate('reviews');
+// exports.getAllTours = catchAsyncFunc( async(req, res) => {
+// 	// let tour = tourModel.find();
+// 	// tour = await tour.sort({_id: -1});
 
-	res.status(200).json({
-		status: 'success',
-		count: tour.length,
-		tour
-	});
-});
+// 	// pupulate virtual field reviews in tourModel (2)
+// 	// let tour = await tourModel.find().select('-__v');
+// 	let tour = await tourModel.find().select('-__v').populate({
+// 		path 	: 'reviews',
+// 		select: '-__v -createdAt'
+// 	});
 
-exports.getTour = catchAsyncFunc(async (req, res, next) => {
-	// let tour = await tourModel.findById(req.params.id);
+// 	sendData(res, 200, tour);
+// 	// res.status(200).json({
+// 	// 	status: 'success',
+// 	// 	count : tour.length,
+// 	// 	tour
+// 	// });
+// });
 
-	// let tour = await tourModel.findById(req.params.id).populate('guides'); 	//	(1)	Auto embed by ID (Full Object)
 
-	// let tour = await tourModel.findById(req.params.id).populate({ 						//	(2)	all but __v & passwordChangedAt
-	// 	path: 'guides',
-	// 	select: '-__v -passwordChangedAt'
-	// });
+// exports.getTour = catchAsyncFunc(async (req, res, next) => {
+// 	// let tour = await tourModel.findById(req.params.id);
 
-	// 	(3) if need to multiple (all) route then use mongoose middleware, pre in tourModel
-	// 	now every find have object seams that it is embaded.	(but it is referenced, see in Database the real fact)
-	let tour = await tourModel.findById(req.params.id);
+// 	// let tour = await tourModel.findById(req.params.id).populate('guides'); 	//	(1)	Auto embed by ID (Full Object)
 
-	if( !tour ) {
-		return next( new ErrorHandler('This is modified ID', 200));
-	}
-	res.status(200).json({
-		status: 'success',
-		data: {tour}
-	});
-});
+// 	// let tour = await tourModel.findById(req.params.id).populate({ 						//	(2)	all but __v & passwordChangedAt
+// 	// 	path: 'guides',
+// 	// 	select: '-__v -passwordChangedAt'
+// 	// });
 
-exports.createTour = catchAsyncFunc(async (req, res, next) => {
-	const tour = await tourModel.create([req.body]);
-	res.status(201).json({
-		status: 'success',
-		data: {tour}
-	});
-});
+// 	// 	(3) if need to multiple (all) route then use mongoose middleware, pre in tourModel
+// 	// 	now every find have object seams that it is embaded.	(but it is referenced, see in Database the real fact)
+// 	let tour = await tourModel.findById(req.params.id).select('-__v');
 
-exports.updateTour = catchAsyncFunc(async (req, res, next) => {
-	const tour = await tourModel.findByIdAndUpdate(req.params.id, req.body, {
-		new: true,
-		runValidators: true
-	});
+// 	if( !tour ) {
+// 		return next( new ErrorHandler('This is modified ID', 200));
+// 	}
+// 	sendData(res, 200, tour);
+// });
 
-	if( !tour ) {
-		return next( new ErrorHandler('No User found to update.', 404));
-	}
 
-	res.status(201).json({
-		status: 'success',
-		data: {tour}
-	});
-});
+// exports.createTour = catchAsyncFunc(async (req, res, next) => {
+// 	const tour = await tourModel.create([req.body]);
 
-exports.deleteTour = catchAsyncFunc(async (req, res, next) => {
-	const tour = await tourModel.findByIdAndDelete(req.params.id);
+// 	sendData(res, 201, tour);
+// 	// res.status(201).json({
+// 	// 	status: 'success',
+// 	// 	data: {tour}
+// 	// });
+// });
 
-	if(!tour) {
-		return next( new ErrorHandler('Opps!!!. User not found.', 404));
-	}
+// exports.updateTour = catchAsyncFunc(async (req, res, next) => {
+// 	const tour = await tourModel.findByIdAndUpdate(req.params.id, req.body, {
+// 		new: true,
+// 		runValidators: true
+// 	});
 
-	res.status(204).json({
-		status: 'success',
-		data 	: {tour}
-	});
+// 	if( !tour ) {
+// 		return next( new ErrorHandler('No User found to update.', 404));
+// 	}
 
-});
+// 	sendData(res, 201, tour);
+// 	// res.status(201).json({
+// 	// 	status: 'success',
+// 	// 	data: {tour}
+// 	// });
+// });
+
+
+// exports.deleteTour = catchAsyncFunc(async (req, res, next) => {
+// 	const tour = await tourModel.findByIdAndDelete(req.params.id);
+
+// 	if(!tour) {
+// 		return next( new ErrorHandler('Opps!!!. User not found.', 404));
+// 	}
+
+// 	sendData(res, 204, tour);
+// 	// res.status(204).json({
+// 	// 	status: 'success',
+// 	// 	data 	: {tour}
+// 	// });
+
+// });
 
 
 

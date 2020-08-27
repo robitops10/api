@@ -1,62 +1,73 @@
 // vim highlight current word
 const userModel = require('./../models/userModel');
-const APIFeatures = require('./../asset/APIFeatures');
+// const APIFeatures = require('./../asset/APIFeatures');
 const catchAsyncFunc  = require('./../asset/catchAsyncFunc');
 const ErrorHandler  = require('./../asset/ErrorHandler');
 const sendData  = require('./../asset/sendData');
 
+const handlerFactory = require('./handlerFactory');
+
+
+exports.getAllUsers = handlerFactory.getAll(userModel);
+exports.getUser 		= handlerFactory.getOne(userModel);
+exports.createUser 	= handlerFactory.createOne(userModel);
+exports.updateUser 	= handlerFactory.updateOne(userModel);
+exports.deleteUser 	= handlerFactory.deleteOne(userModel);
 
 
 
 
+// exports.getAllUsers = catchAsyncFunc( async (req, res, next) => {
+// 	const features = new APIFeatures( userModel.find(), req.query );
+// 	features.filter().sort().projection().pagination();
+// 	let query = features.query; 			// (Access Class Properties)
+// 	let users = await query; 					// make Request to Server & wait for response.
 
-exports.getAllUsers = catchAsyncFunc( async (req, res, next) => {
-	const features = new APIFeatures( userModel.find(), req.query );
-	features.filter().sort().projection().pagination();
-	let query = features.query; 			// (Access Class Properties)
-	let users = await query; 					// make Request to Server & wait for response.
+
+// 	sendData(res, 200, users);
+// });
 
 
-	sendData(res, 200, users);
-});
+// exports.getUser = catchAsyncFunc( async (req, res, next) => {
+// 	let user = await userModel.findById(req.params.id);
 
-exports.getUser = catchAsyncFunc( async (req, res, next) => {
-	let user = await userModel.findById(req.params.id);
+// 	if(!user) {
+// 		return next( new ErrorHandler('User not found', 404) );
+// 	}
 
-	if(!user) {
-		return next( new ErrorHandler('User not found', 404) );
-	}
+// 	sendData(res, 200, user);
+// });
 
-	sendData(res, 200, user);
-});
 
-exports.createUser = catchAsyncFunc( async (req, res, next) => {
-	let user = await userModel.create(req.body);
-	sendData(res, 201, user);
-});
+// exports.createUser = catchAsyncFunc( async (req, res, next) => {
+// 	let user = await userModel.create(req.body);
+// 	sendData(res, 201, user);
+// });
 
-exports.updateUser = catchAsyncFunc( async (req, res, next) => {
-	let user =	await userModel.findByIdAndUpdate(req.params.id, req.body, {
-		new : true,  									// Return modified Query
-		runValidators: true
-	});
 
-	if(!user) {
-		return next( new ErrorHandler('User not found', 404) );
-	}
+// exports.updateUser = catchAsyncFunc( async (req, res, next) => {
+// 	let user =	await userModel.findByIdAndUpdate(req.params.id, req.body, {
+// 		new : true,  									// Return modified Query
+// 		runValidators: true
+// 	});
 
-	sendData(res, 201, user);
-});
+// 	if(!user) {
+// 		return next( new ErrorHandler('User not found', 404) );
+// 	}
 
-exports.deleteUser = catchAsyncFunc( async (req, res, next) => {
-	let user = await userModel.findByIdAndDelete(req.params.id);
+// 	sendData(res, 201, user);
+// });
 
-	if(!user) {
-		return next( new ErrorHandler('User not found', 404) );
-	}
 
-	sendData(res, 204, user);
-});
+// exports.deleteUser = catchAsyncFunc( async (req, res, next) => {
+// 	let user = await userModel.findByIdAndDelete(req.params.id);
+
+// 	if(!user) {
+// 		return next( new ErrorHandler('User not found', 404) );
+// 	}
+
+// 	sendData(res, 204, user);
+// });
 
 
 // this 3 fields pass to next middleware which is 	getAllUsers(),

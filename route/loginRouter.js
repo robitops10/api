@@ -29,7 +29,7 @@ router.route('/')
 
 router.route('/:id')
 	.get(loginController.getLogin)
-	.patch(loginController.updateLogin)
+	.patch(loginController.updateLogin) 							// never give to update password & role by gobal update.
 	.delete(loginController.deleteLogin);
 
 

@@ -37,12 +37,17 @@ reviewModel.pre( /^find/, function(next) {
 	// this.populate('tour user'); 															// (1) work
 	// this.populate('tour').populate('user'); 									// (2) work
 
+	this.populate({
+		path 		: 'user',
+		select 	: 'name role'
+	}).populate({
+		path 		: 'tour',
+		select 	: 'url name -guides'
+	});
+
 	// this.populate({
-	// 	path 		: 'user',
-	// 	select 	: 'name role'
-	// }).populate({
 	// 	path 		: 'tour',
-	// 	select 	: 'url avatar_url -guides'
+	// 	select 	: 'url name age -guides'
 	// });
 
 	next();
