@@ -8,6 +8,16 @@ const tourSchema = new mongoose.Schema({
 	},
 	age : Number,
 	url : String,
+	ratingQuantity: {
+		type: Number,
+		default: 0
+	},
+	ratingAvarage : {
+		type: Number,
+		default: 4.5,
+		min : [1, 'can\'t be lessthan 1'],
+		max : [5, 'can\'t be getherthan 5']
+	},
 	// type : String,
 	// site_admin : Boolean,
 	// node_id : String,

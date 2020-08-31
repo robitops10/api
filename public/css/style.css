@@ -1,0 +1,17 @@
+body {
+	margin: 0;
+	/* padding: .5rem 1rem; */
+}
+
+
+header h1 {
+	background-color: #a0a97f;
+	color : maroon;
+	margin-top: 0;
+}
+
+footer h2 {
+	background-color: #6699c3ff;
+	color : maroon;
+	margin: 0;
+}

@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -10,6 +12,7 @@ const tourRouter = require('./route/tourRouter');
 const userRouter = require('./route/userRouter');
 const loginRouter = require('./route/loginRouter');
 const reviewRouter = require('./route/reviewRouter');
+const viewRouter = require('./route/viewRouter');
 
 const ErrorHandler = require('./asset/ErrorHandler');
 const errorController = require('./controllers/errorController');
@@ -42,14 +45,15 @@ app.use( hpp( { whitelist: ['duration']}) ); 		// Remove Duplicate params's name
 // }
 
 // // set Templete Engine
-// app.set('view engine', 'pug');
-// app.set('views', './views');
-// // set Static Path
-// app.use( express.static( path.resolve(__dirname, 'public') ) );
+app.set('view engine', 'pug'); 																		// No need to require
+app.set('views', path.resolve(__dirname, 'views'));
+app.use( express.static( path.resolve(__dirname, 'public') ) ); 	// set Static Path
 
 
 
 // routers
+
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter );
 app.use('/api/v1/users', userRouter );
 app.use('/api/v1/logins', loginRouter );

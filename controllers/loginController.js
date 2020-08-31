@@ -315,14 +315,20 @@ exports.deleteMe = catchAsyncFunc(async (req, res, next) => {
 
 
 
-
-
-
-
+exports.getMeMiddleware = (req, res, next) => {
+	req.params.id = req.user._id; 		// if added protect middleware then req have user object.
+	next();
+};
 
 /*
  *  Regular Users CRUD Operations
  */
+
+exports.updateLogin = handlerFactory.updateOne(loginModel);
+exports.deleteLogin = handlerFactory.deleteOne(loginModel);
+
+exports.getMe 			= handlerFactory.getOne(loginModel);
+
 
 exports.getAllLogins = catchAsyncFunc(async (req, res, next) => {
 	// const logins = await loginModel.find( {active : true}); 			// here or by pre middleware
@@ -372,9 +378,6 @@ exports.createLogin = catchAsyncFunc(async (req, res, next) => {
 			data : logins
 		});
 });
-
-exports.updateLogin = handlerFactory.updateOne(loginModel);
-exports.deleteLogin = handlerFactory.deleteOne(loginModel);
 
 
 // exports.updateLogin = catchAsyncFunc(async (req, res, next) => {

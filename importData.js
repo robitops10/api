@@ -61,7 +61,8 @@ const Persons = mongoose.model('users', Schema);
 
 const importData = async () => {
 	try{
-		await Persons.create(data);
+		await Persons.create(data); 																		// With Schema Validation On
+		// await Persons.create(data, { validateBeforeSave: false }); 	// With Schema Validation Off
 		console.log( 'data imported successfull !!');
 	} catch (err) {
 		console.log( err.message );

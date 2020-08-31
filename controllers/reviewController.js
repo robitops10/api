@@ -15,7 +15,7 @@ exports.createReviewMiddleware = (req, res, next) => {
 	next();
 };
 
-exports.getAllReviews = handlerFactory.getAll(reviewModel);
+exports.getAllReviews = handlerFactory.getAll(reviewModel); 	// if have populate then add as object.
 exports.getReview 		= handlerFactory.getOne(reviewModel);
 exports.createReview 	= handlerFactory.createOne(reviewModel);
 exports.updateReview 	= handlerFactory.updateOne(reviewModel);

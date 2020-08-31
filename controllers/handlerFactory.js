@@ -44,6 +44,8 @@ exports.getOne = model => catchAsyncFunc(async (req, res, next) => {
 	sendData(res, 200, tour);
 });
 
+
+
 exports.getAll = (model, populateObj) => catchAsyncFunc( async (req, res, next) => {
 	// specially for review on tour
 	let queryFilter = {};
@@ -57,7 +59,6 @@ exports.getAll = (model, populateObj) => catchAsyncFunc( async (req, res, next) 
 	features.filter().sort().projection().pagination();
 	let query = features.query; 			// (Access Class Properties)
 	let users = await query; 					// make Request to Server & wait for response.
-
 
 	sendData(res, 200, users);
 });

@@ -1,0 +1,20 @@
+extends base
+
+block content
+	p this is overview page
+
+	ul
+		li: a(href='/tour') tour
+		li: a(href='/') home
+
+	each tour in tours
+		//- pre= tour
+		ul
+			li= tour.name
+			li= tour.age
+			li= tour.url
+			li= tour.ratingQuantity
+			li= tour.ratingAvarage
+
+	- const d = new Date().toLocaleString('en-us', {month: 'long', year: 'numeric'})
+	h2= d

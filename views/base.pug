@@ -1,0 +1,22 @@
+doctype html
+html
+	head
+		title Natours | #{title}
+		link(rel='stylesheet' href='css/style.css')
+		link(rel='shortcut icon' href='favicon.ico')
+
+	body
+		// ------[ Header Section ]-------
+		include _header
+
+
+		// ------[ Footer Section ]-------
+		block content
+			h3 Replacable code gose here..
+			ul
+				li: a(href='/overview') overview
+				li: a(href='/tour') tour
+
+
+		// ------[ Footer Section ]-------
+		include _footer

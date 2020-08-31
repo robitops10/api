@@ -13,12 +13,12 @@ const router = express.Router( { mergeParams : true } );
 */
 
 
+router.use( loginController.protect ); 						// (1) Every Route is protected after it
 
 router.route('/')
 	.get(reviewController.getAllReviews)
 	.post(
-		loginController.protect,
-		loginController.restrictTo('user'),
+		loginController.restrictTo('user'), 					// (2) Only user can create post ( no admin or others)
 		reviewController.createReviewMiddleware,
 		reviewController.createReview
 	);
@@ -26,7 +26,7 @@ router.route('/')
 
 router.route('/:id')
 	.get(reviewController.getReview)
-	.patch(reviewController.updateReview)
-	.delete(reviewController.deleteReview);
+	.patch(loginController.restrictTo('user'), reviewController.updateReview)
+	.delete(loginController.restrictTo('user'),reviewController.deleteReview);
 
 module.exports = router;

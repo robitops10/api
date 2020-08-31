@@ -12,7 +12,7 @@ const router = express.Router();
 
 
 router.route('/')
-	.get(loginController.protect, tourController.getAllTours)
+	.get(tourController.getAllTours)
 	.post(tourController.createTour);
 
 router.route('/:id')
