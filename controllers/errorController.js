@@ -28,18 +28,29 @@ const handleTokenExpiredError = (err) => {
 };
 
 
-const errDev = (err, res) => {
-	res.status(err.statusCode).json({
-		// name : err.constructor.name, 		// self class name
-		name 		: err.name, 								// overrided class name if inhereted
-		message : err.message,
+const errDev = (err, req, res) => {
+	// if request from API
+	if( req.originalUrl.startsWith('/api') ) {
+		res.status(err.statusCode).json({
+			// name : err.constructor.name, 		// self class name
+			name 		: err.name, 								// overrided class name if inhereted
+			message : err.message,
 
-		status 	: err.status,
-		error 	: err,
-		stack 	: err.stack
-	});
+			status 	: err.status,
+			error 	: err,
+			stack 	: err.stack
+		});
+
+	} else {
+	// if request from Server side Render
+		res.status( err.statusCode ).render('error', {
+			title 	: 'Error Page',
+			msg 		: err.message
+		});
+	}
 };
-const errPro = (err, res) => {
+
+const errPro = (err, req, res) => {
 	if( err.isOperational ) { 																// confirm that error handle by ErrorHandler.js
 		res.status(err.statusCode).json({
 			status 	: err.status,
@@ -56,7 +67,7 @@ module.exports = (err, req, res, next) => {
 	err.status 			= err.status 			|| 'fail';
 
 	if( process.env.NODE_ENV === 'development') {
-		errDev(err, res);
+		errDev(err, req, res);
 
 
 		// let error = '';
@@ -73,7 +84,7 @@ module.exports = (err, req, res, next) => {
 		if( err.name === 'JsonWebTokenError' )  error = handleJsonWebTokenError(err);
 		if( err.name === 'TokenExpiredError' )  error = handleTokenExpiredError(err);
 
-		errPro(error, res); 									// only if (isOperational == true)
+		errPro(error, req, res); 									// only if (isOperational == true)
 
 	} else { 																// if (isOperational == false) == Not handled by our Error Handler.
 		res.status(err.statusCode).json({

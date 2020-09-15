@@ -8,6 +8,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
 
+const cookieParser = require('cookie-parser'); 					// cookie reader
+
 const tourRouter = require('./route/tourRouter');
 const userRouter = require('./route/userRouter');
 const loginRouter = require('./route/loginRouter');
@@ -34,7 +36,8 @@ const myMiddlewareForTest = (req, res, next) => {
 //------------------[ Global Middleware ]----------------------
 app.use( helmet() ); 														// Add HTTP Security Headers
 app.use('/api', rateLimit(limiterObject) ); 		// apply on full API Route	 (limit Request per IP )
-app.use( express.json( { limit: '2kb' }) ); 		// enable req.body Object  & limit Body Data for Security
+app.use( express.json( { limit: '2kb' }) ); 		// Create req.body Object.  & limit Body Data for Security
+app.use( cookieParser() ); 											// Create req.cookies Object.
 app.use( mongoSanitize() ); 										// Disable NoSQL Injections by removing $ which is mongoDB's Operator
 app.use( xssClean() ); 													// Clean Malicious Code, same as htmlEnteties() function in PHP
 app.use( hpp( { whitelist: ['duration']}) ); 		// Remove Duplicate params's name, except those exist in whitelist array
@@ -50,9 +53,14 @@ app.set('views', path.resolve(__dirname, 'views'));
 app.use( express.static( path.resolve(__dirname, 'public') ) ); 	// set Static Path
 
 
+// // Test self middleware
+// app.use( (req, res, next) => {
+// 	console.log( req.cookies ); 									// Reading Cookies on Every request
+// 	next();
+// });
+
 
 // routers
-
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter );
 app.use('/api/v1/users', userRouter );

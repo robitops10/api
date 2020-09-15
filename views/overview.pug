@@ -1,5 +1,8 @@
 extends base
 
+block append head
+	//- script(src='/js/bundle.js')
+
 block content
 	p this is overview page
 
@@ -7,14 +10,20 @@ block content
 		li: a(href='/tour') tour
 		li: a(href='/') home
 
+	br
+	pre= url
+	br
+
 	each tour in tours
 		//- pre= tour
 		ul
-			li= tour.name
-			li= tour.age
-			li= tour.url
-			li= tour.ratingQuantity
-			li= tour.ratingAvarage
+			li name: #{tour.name}
+			li age : #{tour.age}
+			li url : #{tour.url}
+			li total: #{tour.ratingQuantity}
+			li average: #{tour.ratingAvarage}
 
 	- const d = new Date().toLocaleString('en-us', {month: 'long', year: 'numeric'})
 	h2= d
+
+

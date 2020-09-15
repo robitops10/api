@@ -22,7 +22,7 @@ const createSendToken = (user, statusCode, res) => {
 	const cookieOptions = { 												//  						x 				s 		m 		h 	d
 		expires 	: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 1000 * 60 * 60 * 24),
 		// secure 		: true, 												// only send on HTTPS connections
-		httpOnly 	: true  														// Only access my Broser's HTTP methods not others way.
+		httpOnly 	: true  														// Can't Manupulate by Browser, only accessable by HTTP
 	};
 	if( process.env.NODE_ENV === 'production' ) {
 		cookieOptions.secure = true 									// only work on Production which has HTTPS protocol enabled.
@@ -95,13 +95,31 @@ exports.login = catchAsyncFunc( async (req, res, next) => {
 });
 
 
+exports.logout = catchAsyncFunc((req, res, next) => {
+	res.cookie('jwt', 'logout', { 													// (1) We modify jwt token, so modification error fire up
+		expires : new Date( Date.now() + 10 * 1000), 					// expire after 10 second from now.
+		httpOnly : true
+	});
+
+	res.status(200).json({
+		status : 'success'
+	});
+});
+
+
 // 1) Authentication
 exports.protect = catchAsyncFunc( async (req, res, next) => {
 	// 1) Get Token
 	let token = req.headers.authorization;
-	if( token && token.startsWith('Bearer') ) {
+	// 								Obj 	cookieName
+	let cookie = req.cookies.jwt; 											// req.cookies 	created by 'cookie-parser' package
+
+	if( token && token.startsWith('Bearer') ) { 				// if comes from PostMan
 		token =  token.split(' ')[1];
+	} else if( cookie ) { 															// or if comes from browser
+		token = cookie;
 	}
+
 	if( !token ) {
 		return next( new ErrorHandler('You are not loged in, Please login first !!!', 401) );
 	}
@@ -123,9 +141,59 @@ exports.protect = catchAsyncFunc( async (req, res, next) => {
 	}
 
 	// If Everything is fine then pass this middleware.
-	req.user = freshUser;
+	req.user = freshUser; 										// Accessable by next middleware
+	res.locals.user = freshUser; 							// Accessable by template as user Object.
 	next();
 });
+
+
+// exports.isLogedInUser = catchAsyncFunc(async (req, res, next) => {
+// 	let token = req.cookies.jwt;
+// 	if( token ) {
+// 		token = jwt.verify( token, process.env.JWT_SECRET );
+
+// 		const currentUser = await loginModel.findById( token.id );
+// 		if( !currentUser ) return next();
+// 		if( currentUser.isPasswordChanged( token.iat ) ) return next();
+
+// 		res.locals.user = currentUser; 		// this res.locals Object is only available in render. 	user = currentUser
+
+// 		return next(); 										// only one next() allow, so use 		return next();
+// 	}
+
+// 	next();
+// });
+
+
+
+/*
+	* we not throw error by globally, because we want to modify token by our self, when
+	* user need to logout, so this global error throw error for that situation, but we not want,
+	* insted we handle error, locally.
+*/
+exports.isLogedInUser = async (req, res, next) => {
+	let token = req.cookies.jwt;
+	if( token ) {
+		try{
+			token = await promisify(jwt.verify)( token, process.env.JWT_SECRET );
+
+			const currentUser = await loginModel.findById( token.id );
+			if( !currentUser ) return next();
+
+			if( currentUser.isPasswordChanged( token.iat ) ) return next();
+
+			res.locals.user = currentUser; 		// this res.locals Object is only available in render. 	user = currentUser
+			return next(); 										// only one next() allow, so use 		return next();
+
+		// if verification failed, for logout we modify jwt so it try to throw error,
+		// is just redirect to next middleware, without user & pass, which make condition false.
+		} catch( err ) {
+			return next();
+		}
+	}
+	next();
+};
+
 
 // 2) Authorization
 exports.restrictTo = ( ...roles ) => {

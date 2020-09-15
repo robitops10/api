@@ -1,9 +1,11 @@
 doctype html
 html
 	head
-		title Natours | #{title}
-		link(rel='stylesheet' href='css/style.css')
-		link(rel='shortcut icon' href='favicon.ico')
+		block head
+			title Natours | #{title}
+			link(rel='stylesheet' href='/css/style.css')
+			link(rel='shortcut icon' href='favicon.ico')
+			script( defer src='/js/main.js' )
 
 	body
 		// ------[ Header Section ]-------

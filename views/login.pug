@@ -1,0 +1,26 @@
+extends base
+
+block append head
+	script( type='module' defer src='/js/index.js')
+	//- script(type='module' src='js/bundle')
+
+block content
+	h2 login page
+
+	form
+		.row
+			lebel(for='email') Email :
+			//- this email name must be match with database schema name
+			input#email(type='email' name='email' plassholder='abc@gmail.com' required)
+		.row
+			lebel(for='password') Password :
+			//- this password name must be match with database schema name
+			input#password(type='password' name='password' required)
+		.row
+			input#loginBtn(type='submit' value='Send')
+
+	br
+	br
+	#output
+	br
+	br

@@ -1,2 +1,13 @@
 header
 	h1 Header Section Goes Here..
+	a(href='/') Back
+
+	//- this user comes from 			res.locals.user = currentUser
+	if (user)
+		ul
+			li: a#logoutBtn(href='#') logout
+			li: a(href='#')= `${user.name.split(' ')[0]} 	| ${user.email}`
+	else
+		ul
+			li: a(href='/login') Login
+			li: a(href='#') Signup

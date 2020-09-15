@@ -3,15 +3,23 @@ body {
 	/* padding: .5rem 1rem; */
 }
 
+header h1, footer h2 {
+	margin: 0;
+}
 
-header h1 {
+header {
 	background-color: #a0a97f;
 	color : maroon;
 	margin-top: 0;
 }
 
-footer h2 {
+footer {
 	background-color: #6699c3ff;
 	color : maroon;
-	margin: 0;
+}
+
+
+.error {
+	color: red;
+	/* border: 2px solid #6699c3ff; */
 }

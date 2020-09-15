@@ -1,4 +1,10 @@
 extends base
+block append head
+	//- link(href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet')
+	//- //- script(src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js')
+	//- script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+	//- script(defer src='/js/mapbox.js')
+
 
 block content
 	p this is Tour page
@@ -7,5 +13,7 @@ block content
 		li: a(href='/overview') overview
 		li: a(href='/') home
 
-
+	hr
+	br
+	pre= tours
 

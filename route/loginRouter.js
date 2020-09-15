@@ -21,6 +21,7 @@ router.post('/login', loginController.login);
 router.post('/forgotPassword', loginController.forgotPassword);
 router.patch('/resetPassword/:token', loginController.resetPassword);
 
+router.get('/logout', loginController.logout); 												// heat this route by <button id='logoutBtn' >
 
 // ---------------------------[ Protected (Need to Login) ]---------------------------
 
