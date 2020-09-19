@@ -15,6 +15,7 @@ router.post('/handleLogin', viewController.handleLogin);
 
 router.get('/me', viewController.me);
 router.patch('/me',
+	loginController.protect,
 	viewController.photoUpload,
 	viewController.resizePhoto,
 	viewController.updateMe);

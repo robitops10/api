@@ -12,27 +12,33 @@ const userPhoto = document.querySelector('#userPhoto');
 if(output) output.textContent = user;
 
 
+
+
+
 if( submit ) submit.addEventListener('click', async function(e) {
 	e.preventDefault();
-
-	const formData = new FormData( this.form );
-
 	const url = 'http://localhost:3000/me';
-	const res = await fetch(url, {
-		method: 'PATCH',
-		body 	: formData
-	});
 
-	if ( res.status !== 200 ) return '';
-	const data = await res.json();
+	try{
+		const res = await fetch(url, {
+			method: 'PATCH',
+			body 	: new FormData( this.form )
+		});
 
-	if( data.status == 'success' ) {
-		// if(output) output.textContent = JSON.stringify(data.data);
-		// if(output) output.textContent = `Photo [ ${data.data.photo} ] successfully uploaded !!!`;
-		if(userPhoto) userPhoto.src = `/images/${data.data.photo}`;
+		if ( res.status !== 200 ) return '';
+		const data = await res.json();
+
+		if( data.status == 'success' ) {
+			// if(output) output.textContent = `Photo [ ${data.data.photo} ] successfully uploaded !!!`;
+			// if(userPhoto) userPhoto.src = `/images/${data.data.photo}`;
+			location.reload( true ); 								// true=refresh from server, false=from cache
+		}
+
+	} catch( err ) {
+		console.log( 'Opps Error' );
+		// console.log( err );
+
 	}
-	console.log( data.data )
-
 
 
 }, false);

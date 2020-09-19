@@ -7,7 +7,8 @@ header
 		ul
 			li: a#logoutBtn(href='') logout
 			li: a(href='/me')= `${user.name.split(' ')[0]}`
-				span: img#userPhoto(src='/images/Aayan/a2.ico')
+				//- span: img#userPhoto(src='/images/Aayan/a2.ico')
+				span: img#userPhoto(src=`/images/${user.photo}`)
 
 		//- div= user
 
