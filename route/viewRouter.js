@@ -13,5 +13,10 @@ router.get('/tour', viewController.getTour);
 router.get('/login', viewController.getLogin);
 router.post('/handleLogin', viewController.handleLogin);
 
+router.get('/me', viewController.me);
+router.patch('/me',
+	viewController.photoUpload,
+	viewController.resizePhoto,
+	viewController.updateMe);
 
 module.exports = router;

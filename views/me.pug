@@ -1,0 +1,19 @@
+extends base
+block append head
+	script( defer src='/js/me.js')
+block content
+	//- this data retreave by Javascript & hidden by css
+	div#user= user
+
+	form
+		label(for='photo') Upload:
+		input#photo(type='file' name='photo')
+		br
+		br
+		br
+		button#submit Change Photo
+
+
+	br
+	br
+	#output

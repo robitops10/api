@@ -5,8 +5,12 @@ header
 	//- this user comes from 			res.locals.user = currentUser
 	if (user)
 		ul
-			li: a#logoutBtn(href='#') logout
-			li: a(href='#')= `${user.name.split(' ')[0]} 	| ${user.email}`
+			li: a#logoutBtn(href='') logout
+			li: a(href='/me')= `${user.name.split(' ')[0]}`
+				span: img#userPhoto(src='/images/Aayan/a2.ico')
+
+		//- div= user
+
 	else
 		ul
 			li: a(href='/login') Login

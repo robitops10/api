@@ -1,6 +1,8 @@
 const tourModel = require('./../models/tourModel');
 const catchAsyncFunc = require('./../asset/catchAsyncFunc');
 const ErrorHandler = require('./../asset/ErrorHandler');
+const multer = require('multer');
+const sharp = require('sharp');
 
 
 exports.getHome = catchAsyncFunc(async (req, res, next) => {
@@ -59,3 +61,61 @@ exports.handleLogin = (req, res) => {
 	console.log( req.body );
 	console.log( req.cookies );
 };
+
+
+
+exports.me = (req, res) => {
+
+	res.status(200).render('me', {
+		title 	: 'Abount me',
+		// data 		: res.locals.user
+	});
+};
+
+exports.updateMe = (req, res) => {
+	res.status(200).json({
+		status: 'success',
+		data 	: req.body
+
+	});
+	console.log( req.body );
+	// console.log( req.file );
+};
+
+
+const storage = multer.memoryStorage();
+const fileFilter = (req, file, cb) => {
+	if( file.mimetype.startsWith('image') ) {
+		cb(null, true);
+	} else {
+		cb( new ErrorHandler('Only Image supported', 404), false);
+	}
+};
+const upload = multer( {
+	storage,
+	fileFilter
+});
+exports.photoUpload = upload.single('photo'); 		// add req.file.buffer
+
+
+exports.resizePhoto = catchAsyncFunc(async (req, res, next) => {
+	if( !req.file.buffer ) return next();
+
+	const path = 'public/images';
+	const userId = '456abcf3';
+	try{
+		// req.body.photo = `user-${userId}-.jpeg`; 							// same name as input(name='photo')  == schema({ photo: String })
+		req.body.photo = `user-${userId}-${Date.now()}.jpeg`; 		// Without Timestamp, can't override self
+
+		await sharp( req.file.buffer )
+			.resize(60,60)
+			.toFormat('jpeg')
+			.jpeg({quality: 90})
+			.toFile(`${path}/${req.body.photo}`);
+
+	} catch (err) {
+		console.log(err);
+	}
+
+	next();
+});
